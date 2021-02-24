@@ -1,0 +1,18 @@
+ftp_info: ../giab_data_indexes/NA12878/sequence.index.NA12878_Illumina_HiSeq_Exome_Garvan_trimmed_fastq_09252015
+
+dirs:
+  root_dir: ../GRCh37
+  raw_dir: raw_data
+  expected_dirs:
+    - ngs_mapping
+    - variant_calling
+    - variant_export
+
+pipeline_config:
+  pipeline_step:
+    name: ''
+    version: 1
+
+  $ref: 'file://../.snappy_pipeline/config.yaml'
+
+
