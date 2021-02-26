@@ -1,5 +1,6 @@
 
 # import built-in modules
+import hashlib
 import logging
 
 # import third-party modules
@@ -46,3 +47,15 @@ def load_config(config_path):
     with open(config_path, "r") as yaml_file:
         cfg = yaml.safe_load(yaml_file)
     return cfg
+
+
+def file_md5(input_file):
+    """
+    :param input_file: Path to input file.
+    :type input_file: str
+
+    :return: Returns the encoded data in the inputted file in hexadecimal format.
+    """
+    with open(input_file, 'rb') as f:
+        data = f.read()
+        return hashlib.md5(data).hexdigest()
