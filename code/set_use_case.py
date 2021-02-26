@@ -4,11 +4,10 @@ import os
 
 # import third-party modules
 import pandas as pd
-import yaml
 import wget
 
 # import project modules
-from log import get_logger
+from utils import get_logger, load_config, write_config
 
 # Path to config yaml
 CONFIG = os.path.join(os.path.dirname(__file__), 'setup_config.yaml')
@@ -19,7 +18,7 @@ logger = get_logger(name=__name__)
 def main():
     """Main, coordinates step up."""
     # Load config
-    config = load_config()
+    config = load_config(CONFIG)
 
     # Check if analysis directories are present
     check_structure(config["dirs"], config["pipeline_config"])
@@ -30,6 +29,7 @@ def main():
     raw_data_dir = os.path.join(os.path.join(os.path.dirname(__file__), dirs_dict["root_dir"]),
                                 dirs_dict["raw_dir"])
     download_fastq_files(ftp_info,raw_data_dir)
+
 
 def download_fastq_files(ftp_info_file, raw_data_dir):
     """Method downloads fastq files into raw data directory.
@@ -89,25 +89,6 @@ def check_structure(dirs, pipe_config):
     logger.info("Required directory and configuration file structured checked.")
 
 
-def write_config(path, pipe_config):
-    """
-    :param path: Path where new config file should be created.
-    :type path: str
-
-    :param pipe_config: Dictionary with pipeline configuration.
-    :type pipe_config: dict
-    """
-    with open(path, 'w') as yaml_file:
-        yaml.dump(pipe_config, yaml_file, default_flow_style=False)
-
-
-def load_config():
-    """
-    :return: Returns settings as found in configuration file.
-    """
-    with open(CONFIG, "r") as yaml_file:
-        cfg = yaml.safe_load(yaml_file)
-    return cfg
 
 
 if __name__ == "__main__":
