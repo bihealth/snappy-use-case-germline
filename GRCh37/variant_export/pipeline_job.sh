@@ -6,7 +6,7 @@
 # Date: 2017-02-02
 
 # The medium project/queue is a sensible default.
-#SBATCH --partition debug
+#SBATCH --partition medium
 # Set a required running time for the master job.
 #SBATCH --time 3-00
 # Reserve some resources
