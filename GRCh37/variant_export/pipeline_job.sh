@@ -15,7 +15,7 @@
 #SBATCH --export=all
 # Send a mail upon job completion and error
 # Logs should be written into "slurm_log" sub directory.
-#SBATCH --output slurm_log/%%x-%%J.log
+#SBATCH --output slurm_log/%x-%J.log
 # Use more descriptive name in Slurm.
 #SBATCH --job-name variant_export_e2e_test
 
