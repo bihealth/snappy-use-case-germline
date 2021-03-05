@@ -26,9 +26,9 @@ step_config:
       num_threads_align: 16
     target_coverage_report:
       path_target_interval_list_mapping:
-        - pattern: "Agilent SureSelect Human All Exon V6.*"
-          name: "Agilent SureSelect Human All Exon V6 (S07604514)"
-          path: /data/static/agilent-v6.bed
+        - pattern: "Nextera Rapid *"
+          name: "Nextera Rapid Capture Exome and Expanded Exome"
+          path: BED_FILE_PATH
 
 data_sets:
   mundlos_limb:
@@ -38,6 +38,6 @@ data_sets:
       - {left: '*_R1.fastq.gz', right: '*_R2.fastq.gz'}
       - {left: '*_R1_*.fastq.gz', right: '*_R2_*.fastq.gz'}
     search_paths:
-      - /data/raw_data
+      - RAWDATA_DIR_PATH
     type: germline_variants
     naming_scheme: only_secondary_id

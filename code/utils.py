@@ -7,7 +7,6 @@ import logging
 import yaml
 
 
-
 def get_logger(name):
     """
     :return: Returns logger.

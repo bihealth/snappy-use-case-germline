@@ -215,5 +215,6 @@ tags
 
 # End of https://www.toptal.com/developers/gitignore/api/python,vim,emacs
 
-# Downloaded raw data
+# Downloaded data
 GRCh37/raw_data/
+GRCh37/static_data
