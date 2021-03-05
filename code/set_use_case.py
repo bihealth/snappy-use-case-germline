@@ -1,7 +1,9 @@
 
 # import built-in modules
 import csv
+import gzip
 import os
+import re
 
 # import third-party modules
 import wget
@@ -28,13 +30,45 @@ def main():
     # Download bed files
     bed_dict = config["bed_file"]
     static_dir = os.path.join(root_dir_path, dirs_dict["static_dir"])
-    coordinate_bed_download(bed_dict, static_dir)
+    bed_file = coordinate_bed_download(bed_dict, static_dir)
 
-    # Download fastq files
+    # # Download fastq files
     ftp_info = config["ftp_info"]
-    raw_data_dir = os.path.join(root_dir_path, dirs_dict["raw_dir"])
+    raw_data_dir = os.path.abspath(os.path.join(root_dir_path, dirs_dict["raw_dir"]))
     coordinate_fastq_download(ftp_info, raw_data_dir)
 
+    # Update analysis config
+    analysis_config = os.path.join(root_dir_path, config["analysis_config"])
+    update_analysis_config(analysis_config, raw_data_dir, bed_file)
+
+def update_analysis_config(analysis_config, raw_data_dir, bed_file):
+    """Method updates analysis config with missing paths.
+
+    :param analysis_config: Path configuration file used in the analysis.
+    :type analysis_config: str
+
+    :param raw_data_dir: Full path to raw data directory.
+    :type raw_data_dir: str
+
+    :param bed_file: Full path to kit bed file.
+    :type bed_file: str
+    """
+    logger.info(f"Replacing entries in analysis config file:\n"
+                f"- bed file:{bed_file}\n"
+                f"- raw data dir: {raw_data_dir}")
+    # Load config
+    config = load_config(analysis_config)
+
+    # Modify bed file
+    target_coverage_report_dict = config['step_config']['ngs_mapping']['target_coverage_report']
+    target_coverage_report_dict['path_target_interval_list_mapping'][0]['path'] = bed_file
+    config['step_config']['ngs_mapping']['target_coverage_report'] = target_coverage_report_dict
+
+    # Modify raw data dir
+    config['data_sets']['mundlos_limb']['search_paths'] = [raw_data_dir]
+
+    # Replace
+    write_config(analysis_config, config)
 
 
 def coordinate_bed_download(bed_dict, static_dir):
@@ -46,15 +80,50 @@ def coordinate_bed_download(bed_dict, static_dir):
 
     :param static_dir: Full path to static data directory, where bed file should be stored.
     :type static_dir: str
+
+    :return: Returns path to newly created bed file.
     """
     # Get info
     ftp_url = bed_dict['ftp']
     ftp_md5 = bed_dict['md5']
     bed_name = ftp_url.split('/')[-1]
 
-    # Download file
+    # # Download file
     download_and_validate(ftp_url=ftp_url, file_name=bed_name,
                           file_expected_md5=ftp_md5, out_dir=static_dir)
+
+    # Parse bed file
+    bed_file_gz = os.path.join(static_dir, bed_name)
+    bed_file = parse_bed_file(bed_file_gz=bed_file_gz)
+
+    return bed_file
+
+def parse_bed_file(bed_file_gz):
+    """Method parses bed file to make it compatible with nomenclature of chromosome names
+    used internally.
+
+    :param bed_file_gz: Full path to compressed bed file.
+    :type bed_file_gz: str
+
+    :return: Returns path to newly created bed file.
+    """
+    # Set decompressed file path
+    bed_file = bed_file_gz.replace(".gz", "")
+    bed_file = os.path.abspath(bed_file)
+    logger.info(f"Parsing bed file: {bed_file}")
+
+    # Open
+    with gzip.open(bed_file_gz, 'rb') as file_in:
+        # Parse and out
+        with open(bed_file, 'w') as file_out:
+            for line in file_in:
+                # Remove chr from chromosome name
+                out = re.sub("^chr", "", line.decode().strip())
+                # Rename Mitochondrial chromosome
+                out = re.sub("^M", "MT", out)
+                print(out, file=file_out)
+
+    return bed_file
 
 
 def coordinate_fastq_download(ftp_info_file, raw_data_dir):
@@ -174,7 +243,6 @@ def check_structure(dirs, pipe_config):
             write_config(path, pipe_config)
     # Log
     logger.info("Required directory and configuration file structured checked.")
-
 
 
 if __name__ == "__main__":
