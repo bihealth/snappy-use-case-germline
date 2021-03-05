@@ -19,16 +19,42 @@ def main():
     """Main, coordinates step up."""
     # Load config
     config = load_config(CONFIG)
+    dirs_dict = config["dirs"]
+    root_dir_path = os.path.join(os.path.dirname(__file__), dirs_dict["root_dir"])
 
     # Check if analysis directories are present
     check_structure(config["dirs"], config["pipeline_config"])
 
+    # Download bed files
+    bed_dict = config["bed_file"]
+    static_dir = os.path.join(root_dir_path, dirs_dict["static_dir"])
+    coordinate_bed_download(bed_dict, static_dir)
+
     # Download fastq files
     ftp_info = config["ftp_info"]
-    dirs_dict = config["dirs"]
-    raw_data_dir = os.path.join(os.path.join(os.path.dirname(__file__), dirs_dict["root_dir"]),
-                                dirs_dict["raw_dir"])
+    raw_data_dir = os.path.join(root_dir_path, dirs_dict["raw_dir"])
     coordinate_fastq_download(ftp_info, raw_data_dir)
+
+
+
+def coordinate_bed_download(bed_dict, static_dir):
+    """Method coordinates the bed file download into static data directory.
+
+    :param bed_dict: Dictionary with bed file download information: ftp url ('ftp'),
+    and expected md5 ('md5').
+    :type bed_dict: dict
+
+    :param static_dir: Full path to static data directory, where bed file should be stored.
+    :type static_dir: str
+    """
+    # Get info
+    ftp_url = bed_dict['ftp']
+    ftp_md5 = bed_dict['md5']
+    bed_name = ftp_url.split('/')[-1]
+
+    # Download file
+    download_and_validate(ftp_url=ftp_url, file_name=bed_name,
+                          file_expected_md5=ftp_md5, out_dir=static_dir)
 
 
 def coordinate_fastq_download(ftp_info_file, raw_data_dir):
@@ -39,7 +65,7 @@ def coordinate_fastq_download(ftp_info_file, raw_data_dir):
     | NIST_SAMPLE_NAME.
     :type ftp_info_file: str
 
-    :param raw_data_dir: Path to raw data directory where fastq files should be stored.
+    :param raw_data_dir: Full path to raw data directory where fastq files should be stored.
     :type raw_data_dir: str
     """
     # Initialise variables
@@ -124,13 +150,16 @@ def check_structure(dirs, pipe_config):
     root = dirs["root_dir"]
     root_path = os.path.join(os.path.dirname(__file__), root)
 
-    # Raw data directory
-    raw_dir = dirs["raw_dir"]
-    full_dir_path = os.path.join(root_path, raw_dir)
-    if not os.path.exists(full_dir_path):
-        logger.warning(f"Directory '{raw_dir}' was not found and was created.")
-        # Create directory
-        os.makedirs(full_dir_path)
+    # Raw and static data directory
+    data_dir = [os.path.join(root_path, dirs["raw_dir"]),
+                os.path.join(root_path, dirs["static_dir"])]
+    # Iterate
+    for full_dir_path in data_dir:
+        if not os.path.exists(full_dir_path):
+            dir_name = os.path.basename(full_dir_path)
+            logger.warning(f"Directory '{dir_name}' was not found and was created.")
+            # Create directory
+            os.makedirs(full_dir_path)
 
     # Iterate over directories required for analysis
     for directory in dirs["expected_dirs"]:
