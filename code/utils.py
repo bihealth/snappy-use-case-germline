@@ -7,7 +7,6 @@ import logging
 import yaml
 
 
-
 def get_logger(name):
     """
     :return: Returns logger.
@@ -59,4 +58,3 @@ def file_md5(input_file):
     with open(input_file, 'rb') as f:
         data = f.read()
         return hashlib.md5(data).hexdigest()
-

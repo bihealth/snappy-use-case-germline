@@ -126,6 +126,7 @@ def parse_bed_file(bed_file_gz):
     return bed_file
 
 
+
 def coordinate_fastq_download(ftp_info_file, raw_data_dir):
     """Method coordinates the fastq files download into raw data directory.
 
@@ -134,7 +135,7 @@ def coordinate_fastq_download(ftp_info_file, raw_data_dir):
     | NIST_SAMPLE_NAME.
     :type ftp_info_file: str
 
-    :param raw_data_dir: Full path to raw data directory where fastq files should be stored.
+    :param raw_data_dir: Path to raw data directory where fastq files should be stored.
     :type raw_data_dir: str
     """
     # Initialise variables
