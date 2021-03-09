@@ -30,6 +30,22 @@ step_config:
           name: "Nextera Rapid Capture Exome and Expanded Exome"
           path: BED_FILE_PATH
 
+  variant_calling:
+    tools:
+      - gatk_hc
+    gatk_hc:
+      restart_times: 0
+      max_jobs_per_second: 10
+      window_length: 50000000
+      job_mult_time: 1
+    jannovar_statistics:
+      path_ser: /fast/projects/cubit/20.05/static_data/app_support/Jannovar/0.34/hg19_refseq_curated.ser
+
+  variant_export:
+    path_ensembl_ser: /fast/groups/cubi/work/projects/biotools/Jannovar/0.33/hg19_ensembl.ser
+    path_refseq_ser: /fast/groups/cubi/work/projects/biotools/Jannovar/0.33/hg19_refseq_curated.ser
+    path_db: /fast/groups/cubi/work/projects/biotools/varfish-data-releases/20191129/varfish-annotator-db-20191129
+
 data_sets:
   mundlos_limb:
     sodar_uuid: 554d78d6-f1c6-4831-897e-2f871815c30c
