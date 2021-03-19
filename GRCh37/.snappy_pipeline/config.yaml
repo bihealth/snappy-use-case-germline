@@ -52,7 +52,7 @@ data_sets:
     sodar_uuid: 554d78d6-f1c6-4831-897e-2f871815c30c
     file: 2021_germline_use_case.tsv
     search_patterns:
-      - { left: '*_R1.fastq', right: '*_R2.fastq' }
+      - { left: '*_R1.fastq.gz', right: '*_R2.fastq.gz' }
     search_paths:
       - RAWDATA_DIR_PATH
     type: germline_variants
