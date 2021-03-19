@@ -24,7 +24,7 @@ def main():
     # Check if analysis directories are present
     check_structure(config["dirs"], config["pipeline_config"])
     # Path to bed files
-    bed_file = os.path.join(root_dir_path, dirs_dict["bed_file"])
+    bed_file = os.path.abspath(os.path.join(root_dir_path, dirs_dict["bed_file"]))
     # Path fastq files
     raw_data_dir = os.path.abspath(os.path.join(root_dir_path, dirs_dict["raw_dir"]))
 
