@@ -3,6 +3,7 @@ analysis_config: ../GRCh37/.snappy_pipeline/config.yaml
 dirs:
   root_dir: ../GRCh37
   raw_dir: raw_data/NA12878
+  bed_file: static_data/gene_panel_exomes.bed
   expected_dirs:
     - ngs_mapping
     - variant_calling
