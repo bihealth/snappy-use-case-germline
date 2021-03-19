@@ -21,6 +21,7 @@ step_config:
     tools:
       dna:
         - bwa
+      rna: []
     bwa:
       path_index: /fast/projects/cubit/20.05/static_data/precomputed/BWA/0.7.17/GRCh37/hs37d5/hs37d5.fa
       num_threads_align: 16
@@ -51,8 +52,7 @@ data_sets:
     sodar_uuid: 554d78d6-f1c6-4831-897e-2f871815c30c
     file: 2021_germline_use_case.tsv
     search_patterns:
-      - {left: '*_R1.fastq.gz', right: '*_R2.fastq.gz'}
-      - {left: '*_R1_*.fastq.gz', right: '*_R2_*.fastq.gz'}
+      - { left: '*_R1.fastq.gz', right: '*_R2.fastq.gz' }
     search_paths:
       - RAWDATA_DIR_PATH
     type: germline_variants

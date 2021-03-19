@@ -4,7 +4,9 @@ This repository contains the
 [SNAPPY](https://github.com/bihealth/snappy-pipeline)
 use case for germline data processing. Processing starts from FASTQ files, and the result are
 files that can be loaded into
-[VarFish](https://github.com/bihealth/varfish-server)
+[VarFish](https://github.com/bihealth/varfish-server).
+Information on how the test data was obtained can be found
+[here](data.md).
 
 **Setup**
 
