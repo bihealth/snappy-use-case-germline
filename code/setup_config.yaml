@@ -1,15 +1,8 @@
-ftp_info: ../giab_data_indexes/NA12878/sequence.index.NA12878_Illumina_HiSeq_Exome_Garvan_trimmed_fastq_09252015
-
-bed_file:
-  ftp: ftp://ftp-trace.ncbi.nih.gov/ReferenceSamples/giab/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/nexterarapidcapture_expandedexome_targetedregions.bed.gz
-  md5: fbc478d6710795a831b27007d1f295a3
-
 analysis_config: ../GRCh37/.snappy_pipeline/config.yaml
 
 dirs:
   root_dir: ../GRCh37
   raw_dir: raw_data/NA12878
-  static_dir: static_data
   expected_dirs:
     - ngs_mapping
     - variant_calling
