@@ -19,16 +19,14 @@ static_data_config:
 step_config:
   ngs_mapping:
     tools:
-      dna:
-        - bwa
-      rna: []
+      dna: ['bwa']
     bwa:
       path_index: /fast/projects/cubit/20.05/static_data/precomputed/BWA/0.7.17/GRCh37/hs37d5/hs37d5.fa
       num_threads_align: 16
     target_coverage_report:
       path_target_interval_list_mapping:
-        - pattern: "Nextera Rapid *"
-          name: "Nextera Rapid Capture Exome and Expanded Exome"
+        - pattern: "TruSeq Exome*"
+          name: "TruSeq Exome Kit"
           path: BED_FILE_PATH
 
   variant_calling:
